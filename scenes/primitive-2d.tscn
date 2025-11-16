@@ -1,0 +1,79 @@
+[gd_scene load_steps=10 format=3 uid="uid://r7jq8acuw7a3"]
+
+[ext_resource type="Script" uid="uid://bvtisxluxnf7h" path="res://scripts/player-spawner.gd" id="1_3uuqi"]
+[ext_resource type="PackedScene" uid="uid://b5qybas0mp0nd" path="res://scenes/player.tscn" id="2_no63f"]
+[ext_resource type="PackedScene" uid="uid://c4v10d5khk0c5" path="res://scenes/spikes.tscn" id="3_o5x6n"]
+[ext_resource type="PackedScene" uid="uid://badtpsxn5lago" path="res://debug/ui/network-popup.tscn" id="4_w8l26"]
+[ext_resource type="Script" uid="uid://c3eokqjyc0bee" path="res://debug/scripts/simple-time-display.gd" id="5_wss38"]
+
+[sub_resource type="Gradient" id="Gradient_up5yx"]
+colors = PackedColorArray(0.823529, 0.509804, 0.141176, 1, 0.823529, 0.509804, 0.141176, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ormcp"]
+gradient = SubResource("Gradient_up5yx")
+width = 384
+height = 20
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovebb"]
+size = Vector2(384, 20)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_7dehs"]
+a = Vector2(0, -96)
+b = Vector2(0, 96)
+
+[node name="Game Scene" type="Node2D"]
+
+[node name="Network" type="Node" parent="."]
+
+[node name="Player Spawner" type="Node" parent="Network" node_paths=PackedStringArray("spawn_root")]
+script = ExtResource("1_3uuqi")
+player_scene = ExtResource("2_no63f")
+spawn_root = NodePath("../../Players")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(192, 206)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
+texture = SubResource("GradientTexture2D_ormcp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_ovebb")
+
+[node name="Spikes" parent="." instance=ExtResource("3_o5x6n")]
+position = Vector2(384, 100)
+shape = SubResource("SegmentShape2D_7dehs")
+target_position = Vector2(-2.4, 0)
+direction = 2
+counts = 8
+tolerance = 0.9
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="Network Popup" parent="CanvasLayer/UI" instance=ExtResource("4_w8l26")]
+custom_minimum_size = Vector2(180, 120)
+layout_mode = 1
+offset_top = -60.0
+offset_bottom = 60.0
+
+[node name="Time Display" type="Label" parent="CanvasLayer/UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+script = ExtResource("5_wss38")
