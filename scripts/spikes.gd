@@ -47,9 +47,6 @@ func _ready() -> void:
 
 func _rollback_tick(delta: float, tick: int, is_fresh: bool) -> void:
 	rewindable_hit_action.set_active(false)
-	_emit_damage()
-
-func _emit_damage() -> void:
 	force_shapecast_update()
 	var hit_count := get_collision_count()
 	for hit_idx in range(hit_count):
